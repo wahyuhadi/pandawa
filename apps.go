@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"log"
 	"os"
+	github "pandawa/github"
 	shodan "pandawa/shodan"
 )
 
@@ -56,4 +57,7 @@ func main() {
 
 	// shodan search
 	shodan.PreSearch(file.Shodan.Key)
+
+	// githu search
+	github.GetGitRepo(*domain, "desc")
 }
