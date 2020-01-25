@@ -8,14 +8,17 @@ import (
 	"os"
 	db "pandawa/database"
 	"pandawa/github"
-	shodan "pandawa/shodan"
+
+	prompt "pandawa/cli"
+	//shodan "pandawa/shodan"
 )
 
 var (
 	domain = flag.String("domain", "google.com", "Domain for osint")
 	config = flag.String("config", "~/.pandawa-config.json", "Specify the configuration file.")
 
-	operation = flag.String("ops", "aurora", "Operation name")
+	operation = flag.String("ops", "no", "Operation name")
+	cli       = flag.String("cli", "no", "cli mode connect to sqldatabase")
 )
 
 // Membaca file configurasi dari config.json
@@ -54,23 +57,34 @@ func ReadFileConf() Configuration {
 }
 
 func main() {
+
 	fmt.Println("[+] Pandawa osint")
 	flag.Parse()
-	fmt.Println(*domain)
+	if *operation == "no" {
+		fmt.Println("[+] Enter operation name example --ops=pandawa")
+		os.Exit(1)
+	}
+	// pada saat mode cli digunakan untuk melakukan query pada database sqlite
+	// next nya akan dikembangkan untuk terminal command
+	if *cli == "yes" {
+		fmt.Println("[+] Enter operation name", *operation)
+		prompt.Cli()
+		os.Exit(1)
+	}
 
 	dbname := db.GenerateDb(*operation)
 	fmt.Println("[+] Location DB ", dbname)
 
-	file := ReadFileConf()
+	//file := ReadFileConf()
 
 	// shodan search
 	// Mencari dengan mengunakan shodan mmh3
 	// req : shodan key
-	shodan.PreSearch(file.Shodan.Key)
+	//shodan.PreSearch(file.Shodan.Key)
 
 	// search keyword didalam code github
 	// req : keyword and order type (asc , desc)
 	db.GenDbGithub(dbname)
-	github.GetGitRepo(*domain, "desc")
+	github.GetGitRepo(*domain, "desc", dbname)
 
 }

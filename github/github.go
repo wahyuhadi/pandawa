@@ -7,6 +7,8 @@ import (
 	"log"
 	"net/http"
 	"os"
+	db "pandawa/database"
+	"strconv"
 	"text/tabwriter"
 	"time"
 )
@@ -121,7 +123,7 @@ type Repositories struct {
 // github osint for code leaks and credential exposure on public
 // Search github function
 // Repositories Item is the single repository data structure
-func GetGitRepo(key string, order string) {
+func GetGitRepo(key string, order string, dbname string) {
 	fmt.Println("\n[+] Searching code from github publib ... ")
 	URI := "https://api.github.com/search/repositories?q=" + key + "+in:file,readme,code,description&sort=interactions&order=" + order + "&page=1&per_page=10000"
 	res, err := http.Get(URI)
@@ -141,7 +143,10 @@ func GetGitRepo(key string, order string) {
 	if err != nil {
 		log.Fatal(err)
 	}
-	printData(data)
+
+	AddToDb(dbname, data)
+	//printData(data)
+
 	//return data
 }
 
@@ -178,4 +183,38 @@ func printData(data Repositories) {
 		fmt.Fprintf(tw, format, i.FullName, i.StargazersCount, t.Year(), desc)
 	}
 	tw.Flush()
+}
+
+// Add data to database
+func AddToDb(dbname string, data Repositories) {
+	// length := len(data.Items)
+	// var wg sync.WaitGroup
+	// wg.Add(length)
+	for _, i := range data.Items {
+		// go func() {
+		// 	defer wg.Done()
+		// 	raw := i.Owner.HTMLURL
+		// 	t, err := time.Parse(time.RFC3339, i.UpdatedAt)
+		// 	if err != nil {
+		// 		log.Fatal(err)
+		// 	}
+		// 	updatedAt := strconv.Itoa(t.Year())
+		// 	repos := i.FullName
+		// 	gitUrl := i.HTMLURL
+
+		// 	db.AddGithubData(repos, updatedAt, raw, gitUrl, dbname)
+		// }()
+		raw := i.Owner.HTMLURL
+		t, err := time.Parse(time.RFC3339, i.UpdatedAt)
+		if err != nil {
+			log.Fatal(err)
+		}
+		updatedAt := strconv.Itoa(t.Year())
+		repos := i.FullName
+		gitUrl := i.HTMLURL
+
+		db.AddGithubData(repos, updatedAt, raw, gitUrl, dbname)
+	}
+
+	//wg.Wait()
 }
