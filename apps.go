@@ -60,15 +60,17 @@ func main() {
 
 	fmt.Println("[+] Pandawa osint")
 	flag.Parse()
-	if *operation == "no" {
-		fmt.Println("[+] Enter operation name example --ops=pandawa")
-		os.Exit(1)
-	}
+
 	// pada saat mode cli digunakan untuk melakukan query pada database sqlite
 	// next nya akan dikembangkan untuk terminal command
 	if *cli == "yes" {
 		fmt.Println("[+] Enter operation name", *operation)
 		prompt.Cli()
+		os.Exit(1)
+	}
+
+	if *operation == "no" {
+		fmt.Println("[+] Enter operation name example --ops=pandawa")
 		os.Exit(1)
 	}
 

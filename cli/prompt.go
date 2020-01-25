@@ -2,6 +2,9 @@ package cli
 
 import (
 	"fmt"
+	"strings"
+
+	db "pandawa/database"
 
 	prompt "github.com/c-bata/go-prompt"
 )
@@ -18,9 +21,24 @@ func executor(in string) {
 		return
 	}
 
-	switch in {
+	initcommand := strings.Split(in, " ")
+
+	if len(initcommand) == 1 {
+		fmt.Println("[!] please set the operation name")
+		fmt.Println("[!] example >>> github pandawa")
+
+		return
+	}
+	if initcommand[1] == "" {
+		fmt.Println("[!] please set the operation name")
+		fmt.Println("[!] example >>> github pandawa")
+
+		return
+	}
+	switch initcommand[0] {
 	case "github":
 		fmt.Println("[+] Collect data github")
+		db.CollectData(initcommand[1])
 		return
 	default:
 		fmt.Println("[!] Not in services")
@@ -33,7 +51,7 @@ func executor(in string) {
 
 func completer(in prompt.Document) []prompt.Suggest {
 	s := []prompt.Suggest{
-		{Text: "github", Description: "Get All data from github"},
+		{Text: "github", Description: "Get All data from github with operation name"},
 	}
 	return prompt.FilterHasPrefix(s, in.GetWordBeforeCursor(), true)
 }

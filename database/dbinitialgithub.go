@@ -2,6 +2,8 @@ package database
 
 import (
 	"database/sql"
+	"fmt"
+	"strconv"
 
 	_ "github.com/mattn/go-sqlite3"
 )
@@ -24,5 +26,24 @@ func AddGithubData(repository, updateat, rawurl, giturl, nameDB string) {
 
 // Collect data from db
 func CollectData(nameDB string) {
+	dblocation := "pandawa-output/" + nameDB + ".db"
+	fmt.Println("[+] ID : ", dblocation)
 
+	database, _ := sql.Open("sqlite3", dblocation)
+	rows, _ := database.Query("SELECT * FROM github")
+	var id int
+	var repository string
+	var updateat string
+	var rawurl string
+	var giturl string
+	for rows.Next() {
+		rows.Scan(&id, &repository, &updateat, &rawurl, &giturl)
+		fmt.Println("*********************************")
+		fmt.Println("[+] ID : ", strconv.Itoa(id))
+		fmt.Println("[+] Repo :", repository)
+		fmt.Println("[+] Update :", updateat)
+		fmt.Println("[+] User : ", rawurl)
+		fmt.Println("[+] URL : ", giturl)
+
+	}
 }
