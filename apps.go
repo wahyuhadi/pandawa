@@ -6,15 +6,19 @@ import (
 	"fmt"
 	"log"
 	"os"
-	github "pandawa/github"
+	db "pandawa/database"
+	"pandawa/github"
 	shodan "pandawa/shodan"
 )
 
 var (
 	domain = flag.String("domain", "google.com", "Domain for osint")
-	config = flag.String("config", "config.json", "Specify the configuration file.")
+	config = flag.String("config", "~/.pandawa-config.json", "Specify the configuration file.")
+
+	operation = flag.String("ops", "aurora", "Operation name")
 )
 
+// Membaca file configurasi dari config.json
 type Configuration struct {
 	Shodan struct {
 		Key string
@@ -53,11 +57,20 @@ func main() {
 	fmt.Println("[+] Pandawa osint")
 	flag.Parse()
 	fmt.Println(*domain)
+
+	dbname := db.GenerateDb(*operation)
+	fmt.Println("[+] Location DB ", dbname)
+
 	file := ReadFileConf()
 
 	// shodan search
+	// Mencari dengan mengunakan shodan mmh3
+	// req : shodan key
 	shodan.PreSearch(file.Shodan.Key)
 
-	// githu search
+	// search keyword didalam code github
+	// req : keyword and order type (asc , desc)
+	db.GenDbGithub(dbname)
 	github.GetGitRepo(*domain, "desc")
+
 }

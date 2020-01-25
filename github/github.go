@@ -1,13 +1,13 @@
 package github
 
 import (
-	"bufio"
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
 	"log"
 	"net/http"
 	"os"
+	"text/tabwriter"
 	"time"
 )
 
@@ -155,22 +155,22 @@ func printData(data Repositories) {
 	log.Printf("Repositories found: %d", data.TotalCount)
 	const format = "%v\t%v\t%v\t%v\t\n"
 
-	f, err := os.Create("yourfile")
-	check(err)
-	defer f.Close()
+	// f, err := os.Create("yourfile")
+	// check(err)
+	// defer f.Close()
 
-	//tw := new(tabwriter.Writer).Init(os.Stdout, 0, 8, 2, ' ', 0)
-	tw := bufio.NewWriter(f)
+	tw := new(tabwriter.Writer).Init(os.Stdout, 0, 8, 2, ' ', 0)
+	// tw := bufio.NewWriter(f)
 	fmt.Fprintf(tw, format, "Repository", "Stars", "Updated at", "Description")
 	fmt.Fprintf(tw, format, "----------", "-----", "----------", "----------")
 
 	// Parsing data from response
 	for _, i := range data.Items {
-		desc := i.Description + "\n"
+		desc := i.Owner.HTMLURL + "\n"
 
-		if len(desc) > 50 {
-			desc = string(desc[:50]) + "..."
-		}
+		// if len(desc) > 50 {
+		// 	desc = string(desc[:50]) + "..."
+		// }
 		t, err := time.Parse(time.RFC3339, i.UpdatedAt)
 		if err != nil {
 			log.Fatal(err)
