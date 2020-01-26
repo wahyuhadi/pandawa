@@ -45,8 +45,9 @@ func executor(in string) {
 		return
 
 	}
-	LivePrefixState.LivePrefix = in + "> "
-	LivePrefixState.IsEnable = true
+	LivePrefixState.LivePrefix = initcommand[1] + "ops > "
+	LivePrefixState.IsEnable = false
+	return
 }
 
 func completer(in prompt.Document) []prompt.Suggest {

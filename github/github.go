@@ -6,10 +6,8 @@ import (
 	"io/ioutil"
 	"log"
 	"net/http"
-	"os"
 	db "pandawa/database"
 	"strconv"
-	"text/tabwriter"
 	"time"
 )
 
@@ -145,65 +143,12 @@ func GetGitRepo(key string, order string, dbname string) {
 	}
 
 	AddToDb(dbname, data)
-	//printData(data)
-
-	//return data
-}
-
-func check(err error) {
-	if err != nil {
-		panic(err)
-	}
-}
-
-func printData(data Repositories) {
-	log.Printf("Repositories found: %d", data.TotalCount)
-	const format = "%v\t%v\t%v\t%v\t\n"
-
-	// f, err := os.Create("yourfile")
-	// check(err)
-	// defer f.Close()
-
-	tw := new(tabwriter.Writer).Init(os.Stdout, 0, 8, 2, ' ', 0)
-	// tw := bufio.NewWriter(f)
-	fmt.Fprintf(tw, format, "Repository", "Stars", "Updated at", "Description")
-	fmt.Fprintf(tw, format, "----------", "-----", "----------", "----------")
-
-	// Parsing data from response
-	for _, i := range data.Items {
-		desc := i.Owner.HTMLURL + "\n"
-
-		// if len(desc) > 50 {
-		// 	desc = string(desc[:50]) + "..."
-		// }
-		t, err := time.Parse(time.RFC3339, i.UpdatedAt)
-		if err != nil {
-			log.Fatal(err)
-		}
-		fmt.Fprintf(tw, format, i.FullName, i.StargazersCount, t.Year(), desc)
-	}
-	tw.Flush()
 }
 
 // Add data to database
 func AddToDb(dbname string, data Repositories) {
-	// length := len(data.Items)
-	// var wg sync.WaitGroup
-	// wg.Add(length)
 	for _, i := range data.Items {
-		// go func() {
-		// 	defer wg.Done()
-		// 	raw := i.Owner.HTMLURL
-		// 	t, err := time.Parse(time.RFC3339, i.UpdatedAt)
-		// 	if err != nil {
-		// 		log.Fatal(err)
-		// 	}
-		// 	updatedAt := strconv.Itoa(t.Year())
-		// 	repos := i.FullName
-		// 	gitUrl := i.HTMLURL
 
-		// 	db.AddGithubData(repos, updatedAt, raw, gitUrl, dbname)
-		// }()
 		raw := i.Owner.HTMLURL
 		t, err := time.Parse(time.RFC3339, i.UpdatedAt)
 		if err != nil {
@@ -212,9 +157,7 @@ func AddToDb(dbname string, data Repositories) {
 		updatedAt := strconv.Itoa(t.Year())
 		repos := i.FullName
 		gitUrl := i.HTMLURL
-
+		// Menambahkan data ke database
 		db.AddGithubData(repos, updatedAt, raw, gitUrl, dbname)
 	}
-
-	//wg.Wait()
 }

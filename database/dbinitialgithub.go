@@ -38,7 +38,7 @@ func CollectData(nameDB string) {
 	var giturl string
 	for rows.Next() {
 		rows.Scan(&id, &repository, &updateat, &rawurl, &giturl)
-		fmt.Println("*********************************")
+		fmt.Println("*************************************************")
 		fmt.Println("[+] ID : ", strconv.Itoa(id))
 		fmt.Println("[+] Repo :", repository)
 		fmt.Println("[+] Update :", updateat)

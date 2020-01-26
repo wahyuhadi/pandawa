@@ -7,16 +7,17 @@ import (
 	"log"
 	"os"
 	db "pandawa/database"
-	"pandawa/github"
+
+	//"pandawa/shodan"
 
 	prompt "pandawa/cli"
-	//shodan "pandawa/shodan"
+	shodan "pandawa/shodan"
 )
 
 var (
-	domain = flag.String("domain", "google.com", "Domain for osint")
-	config = flag.String("config", "~/.pandawa-config.json", "Specify the configuration file.")
-
+	domain    = flag.String("domain", "google.com", "Domain for osint")
+	config    = flag.String("config", "~/.pandawa-config.json", "Specify the configuration file.")
+	favicon   = flag.String("fav", "no", "favicon.ico URL ")
 	operation = flag.String("ops", "no", "Operation name")
 	cli       = flag.String("cli", "no", "cli mode connect to sqldatabase")
 )
@@ -74,6 +75,11 @@ func main() {
 		os.Exit(1)
 	}
 
+	if *favicon == "no" {
+		fmt.Println("[+] Enter favicon url  example --fav=https://localhost.com/favicon.ico")
+		os.Exit(1)
+	}
+
 	dbname := db.GenerateDb(*operation)
 	fmt.Println("[+] Location DB ", dbname)
 
@@ -84,9 +90,11 @@ func main() {
 	// req : shodan key
 	//shodan.PreSearch(file.Shodan.Key)
 
+	shodan.GetFav(*favicon)
+
 	// search keyword didalam code github
 	// req : keyword and order type (asc , desc)
-	db.GenDbGithub(dbname)
-	github.GetGitRepo(*domain, "desc", dbname)
+	// db.GenDbGithub(dbname)
+	// github.GetGitRepo(*domain, "desc", dbname)
 
 }
