@@ -14,7 +14,7 @@ var (
 	fullUrlFile string
 )
 
-func GetFav(name string) {
+func GetFav(name string) uint32 {
 
 	fullUrlFile = name
 
@@ -26,7 +26,7 @@ func GetFav(name string) {
 
 	// Put content on file
 	putFile(file, httpClient())
-	ToB64(filename)
+	return ToB64(filename)
 
 }
 

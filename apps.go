@@ -83,14 +83,12 @@ func main() {
 	dbname := db.GenerateDb(*operation)
 	fmt.Println("[+] Location DB ", dbname)
 
-	//file := ReadFileConf()
+	file := ReadFileConf()
 
-	// shodan search
-	// Mencari dengan mengunakan shodan mmh3
-	// req : shodan key
-	//shodan.PreSearch(file.Shodan.Key)
-
-	shodan.GetFav(*favicon)
+	// convert favicon ico ke mumurhash
+	mmh3 := shodan.GetFav(*favicon)
+	//Exec shodan main
+	shodan.PreSearch(file.Shodan.Key, mmh3)
 
 	// search keyword didalam code github
 	// req : keyword and order type (asc , desc)
