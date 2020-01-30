@@ -3,7 +3,6 @@ package shodan
 import (
 	"bufio"
 	"encoding/base64"
-	"fmt"
 	"io/ioutil"
 	"os"
 
@@ -12,7 +11,7 @@ import (
 
 // GetFavicon
 // get Favicon dari URL untuk digunakan search osint di shodan dengan MMH3
-func ToB64(nameico string) {
+func ToB64(nameico string) uint32 {
 	f, _ := os.Open(nameico)
 
 	// Read entire JPG into byte slice.
@@ -20,16 +19,15 @@ func ToB64(nameico string) {
 	content, _ := ioutil.ReadAll(reader)
 
 	// Encode as base64.
-	encoded := base64.StdEncoding.EncodeToString([]byte(content))
-
+	encoded := base64.StdEncoding.EncodeToString(content)
 	// Print encoded data to console.
 	// ... The base64 image can be used as a data URI in a browser.
-	FaviconToMMH(encoded)
+	return FaviconToMMH(encoded)
 }
 
 // Melakuka hash dengan menggunakan mmh3
 // mmh3(base64(favicon.ico))
-func FaviconToMMH(b64enc string) {
-	mmh3_64 := mmh3.Sum32([]byte(b64enc))
-	fmt.Println(mmh3_64)
+func FaviconToMMH(b64enc string) uint32 {
+	mmh3_64 := mmh3.Sum32WithSeed([]byte(b64enc), 64)
+	return mmh3_64
 }
