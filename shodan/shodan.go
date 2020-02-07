@@ -6,6 +6,7 @@ import (
 	"io/ioutil"
 	"log"
 	"net/http"
+	db "pandawa/database"
 )
 
 // Validasi semua inputan sudah terpenui atau tidak
@@ -61,12 +62,12 @@ func PreSearch(key string, mmh3 uint32, dbname string) {
 		log.Fatal(err)
 	}
 
-	for _, i := range data.Matches {
-		fmt.Println(i.IPStr)
-	}
-	//AddDataShodanToDB(dbname, data)
+	// Add data to shodan tables
+	AddDataShodanToDB(dbname, data)
 }
 
 func AddDataShodanToDB(dbname string, data ShodanResponses) {
-
+	for _, i := range data.Matches {
+		db.AddDBShodan(i.IP, i.IPStr, i.Isp, dbname)
+	}
 }

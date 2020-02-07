@@ -40,6 +40,10 @@ func executor(in string) {
 		fmt.Println("[+] Collect data github")
 		db.CollectData(initcommand[1])
 		return
+	case "shodan":
+		fmt.Println("[+] Collect data shodan")
+		db.CollectDataShodan(initcommand[1])
+		return
 	default:
 		fmt.Println("[!] Not in services")
 		return
@@ -53,6 +57,7 @@ func executor(in string) {
 func completer(in prompt.Document) []prompt.Suggest {
 	s := []prompt.Suggest{
 		{Text: "github", Description: "Get All data from github with operation name"},
+		{Text: "shodan", Description: "Get All data from shodan with operation name"},
 	}
 	return prompt.FilterHasPrefix(s, in.GetWordBeforeCursor(), true)
 }
