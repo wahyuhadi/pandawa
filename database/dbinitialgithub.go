@@ -31,6 +31,10 @@ func CollectData(nameDB string) {
 
 	database, _ := sql.Open("sqlite3", dblocation)
 	rows, _ := database.Query("SELECT * FROM github")
+	if rows == nil {
+		fmt.Println("[!] Data in github not found")
+		return
+	}
 	var id int
 	var repository string
 	var updateat string

@@ -26,6 +26,10 @@ func CollectDataShodan(nameDB string) {
 	fmt.Println("[+] ID : ", dblocation)
 	database, _ := sql.Open("sqlite3", dblocation)
 	rows, _ := database.Query("SELECT * FROM shodan")
+	if rows == nil {
+		fmt.Println("[!] Data in shodan not found")
+		return
+	}
 	var id int
 	var ip int
 	var ip_str string
