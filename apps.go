@@ -88,7 +88,7 @@ func main() {
 	// convert favicon ico ke mumurhash
 	mmh3 := shodan.GetFav(*favicon)
 	//Exec shodan main
-	shodan.PreSearch(file.Shodan.Key, mmh3)
+	shodan.PreSearch(file.Shodan.Key, mmh3, dbname)
 
 	// search keyword didalam code github
 	// req : keyword and order type (asc , desc)
