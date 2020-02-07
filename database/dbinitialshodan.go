@@ -3,6 +3,7 @@ package database
 import (
 	"database/sql"
 	"fmt"
+	service "pandawa/services"
 	"strconv"
 
 	_ "github.com/mattn/go-sqlite3"
@@ -42,5 +43,7 @@ func CollectDataShodan(nameDB string) {
 		fmt.Println("[+] IP_STR :", ip_str)
 		fmt.Println("[+] ISP    :", isp)
 
+		// pre init for check conditional in ip addresses
+		service.PreInit(ip_str)
 	}
 }
