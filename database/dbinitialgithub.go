@@ -12,6 +12,7 @@ import (
 //
 func GenDbGithub(nameDB string) {
 	database, _ := sql.Open("sqlite3", nameDB)
+	defer database.Close()
 	statement, _ := database.Prepare("CREATE TABLE IF NOT EXISTS github (id INTEGER PRIMARY KEY, repository TEXT, updateat TEXT, rawurl TEXT, giturl TEXT)")
 	statement.Exec()
 }
@@ -20,6 +21,7 @@ func GenDbGithub(nameDB string) {
 // insert
 func AddGithubData(repository, updateat, rawurl, giturl, nameDB string) {
 	database, _ := sql.Open("sqlite3", nameDB)
+	defer database.Close()
 	statement, _ := database.Prepare("INSERT INTO github (repository, updateat,rawurl, giturl) VALUES (?, ?, ?, ?)")
 	statement.Exec(repository, updateat, rawurl, giturl)
 }
@@ -35,6 +37,9 @@ func CollectData(nameDB string) {
 		fmt.Println("[!] Data in github not found")
 		return
 	}
+
+	defer database.Close()
+	defer rows.Close()
 	var id int
 	var repository string
 	var updateat string
