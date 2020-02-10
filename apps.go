@@ -83,12 +83,16 @@ func main() {
 	dbname := db.GenerateDb(*operation)
 	fmt.Println("[+] Location DB ", dbname)
 
-	file := ReadFileConf()
-
+	//file := ReadFileConf()
+	shodankey := os.Getenv("shodan")
+	if shodankey == "" {
+		fmt.Println("[!] shodan key not found please export shodan key in .bashrc or .zshrc")
+		os.Exit(1)
+	}
 	// convert favicon ico ke mumurhash
 	mmh3 := shodan.GetFav(*favicon)
 	//Exec shodan main
-	shodan.PreSearch(file.Shodan.Key, mmh3, dbname)
+	shodan.PreSearch(shodankey, mmh3, dbname)
 
 	// search keyword didalam code github
 	// req : keyword and order type (asc , desc)
