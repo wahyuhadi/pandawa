@@ -5,6 +5,7 @@ import (
 	"strings"
 
 	db "pandawa/database"
+	github "pandawa/github"
 	spider "pandawa/spider"
 
 	prompt "github.com/c-bata/go-prompt"
@@ -37,10 +38,12 @@ func executor(in string) {
 		return
 	}
 	switch initcommand[0] {
+
 	case "github":
 		fmt.Println("[+] Collect data github")
 		db.CollectData(initcommand[1])
 		return
+
 	case "shodan":
 		fmt.Println("[+] Collect data shodan")
 		db.CollectDataShodan(initcommand[1])
@@ -49,9 +52,15 @@ func executor(in string) {
 	case "spider-js":
 		spider.InitJs(initcommand[1])
 		return
+
 	case "spider-page":
 		spider.InitPage(initcommand[1])
 		return
+
+	case "spider-github":
+		github.InitalSpider(initcommand[1])
+		return
+
 	default:
 		fmt.Println("[!] Not in services")
 		return
@@ -68,6 +77,7 @@ func completer(in prompt.Document) []prompt.Suggest {
 		{Text: "shodan", Description: "Get All data from shodan with operation name"},
 		{Text: "spider-js", Description: "Get js file from web "},
 		{Text: "spider-page", Description: "Get page file from web "},
+		{Text: "spider-github", Description: "Get data from github and commit"},
 	}
 	return prompt.FilterHasPrefix(s, in.GetWordBeforeCursor(), true)
 }
