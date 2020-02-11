@@ -45,6 +45,7 @@ type UsersInfo struct {
 var (
 	URI        = "https://api.github.com/users/"
 	PublicRepo = 0
+	GithubUser = ""
 )
 
 // Client for connect to github API
@@ -59,6 +60,8 @@ func GithubReq(url string) (*http.Response, error) {
 }
 
 func InitalSpider(login string) {
+	// define username github
+	GithubUser = login
 	isGetUserInfoUri := URI + login
 	r, err := GithubReq(isGetUserInfoUri)
 	if err != nil {
@@ -74,6 +77,8 @@ func InitalSpider(login string) {
 	json.NewDecoder(r.Body).Decode(userInfoRes)
 	// Parsing
 	PublicRepo = userInfoRes.PublicRepos
-	fmt.Println(userInfoRes.Company)
-	fmt.Println(PublicRepo)
+
+	fmt.Println("[+] Spider github account :", GithubUser)
+	fmt.Println("[+] Work at : ", userInfoRes.Company)
+	fmt.Println("[+] Total public repo : ", PublicRepo)
 }
