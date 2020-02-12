@@ -4,7 +4,6 @@ import (
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
-	"log"
 	"strconv"
 	"time"
 )
@@ -82,6 +81,7 @@ type RepoPublic []struct {
 	ID     int    `json:"id"`
 	NodeID string `json:"node_id"`
 	Name   string `json:"name"`
+	Fork   bool   `json:"fork"`
 }
 
 // Get hash from repo public list
@@ -89,8 +89,8 @@ func PreSpider() {
 	// isPage := CalculatePage()
 	fmt.Println("[+] This process starting, take some coffee and enjoyed .. ")
 	URIRepoPub := URI + GithubUser + "/repos?per_page=" + strconv.Itoa(PerPage)
-
 	isFinalRepo := URIRepoPub
+
 	// Get
 	r, err := GithubReq(isFinalRepo)
 	if err != nil {
@@ -98,23 +98,30 @@ func PreSpider() {
 		fmt.Println("[!] Cek this endpoint ", URI)
 		return
 	}
+
 	// body save
 	body, err := ioutil.ReadAll(r.Body)
 	r.Body.Close()
 	if err != nil {
-		log.Fatal("Error when save body ", err)
+		fmt.Println("[!] Error func Prespider ")
+		return
 	}
+
 	// Parsing
 	data := RepoPublic{}
 	err = json.Unmarshal(body, &data)
 	if err != nil {
-		log.Fatal(err)
+		fmt.Println("[!] Error func Prespider ")
+		return
 	}
+
 	// Loop
-	loop := 1
+	loop := 0
 	for _, x := range data {
-		loop = loop + 1
-		fmt.Println("[+] pre-cloning repo : ", x.Name, " repo ", loop)
-		//GetShaCommiter(x.Name)
+		if x.Fork == false {
+			loop = loop + 1
+			fmt.Println("[", loop, "] pre-cloning repo : ", x.Name)
+			GetShaCommiter(x.Name)
+		}
 	}
 }

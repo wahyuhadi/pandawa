@@ -4,7 +4,6 @@ import (
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
-	"log"
 	"strconv"
 )
 
@@ -31,20 +30,24 @@ func GetShaCommiter(repoName string) {
 		fmt.Println("[!] Cek this endpoint ", isURIsha)
 		return
 	}
+
 	// body save
 	body, err := ioutil.ReadAll(r.Body)
 	r.Body.Close()
 	if err != nil {
-		log.Fatal(err)
+		fmt.Println("[!] Error func GetShaCommiter  ", err)
+		return
 	}
+
 	// Parsing
 	data := ShaCommit{}
 	err = json.Unmarshal(body, &data)
 	if err != nil {
-		log.Fatal(err)
+		fmt.Println("[!] Error func GetShaCommiter ")
+		return
 	}
 
 	for _, x := range data {
-		fmt.Println("[+] Check sha commit ", x.Sha)
+		fmt.Println("-------> [+] Check sha commit ", x.Sha)
 	}
 }
