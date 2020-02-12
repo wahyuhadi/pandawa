@@ -19,9 +19,9 @@ func GithubReq(url string) (*http.Response, error) {
 		os.Exit(1)
 	}
 
-	// isToken := "token " + githubToken
+	isToken := "token " + githubToken
 	res, err := myClient.Get(url)
-	res.Header.Set("Authorization", "token 49fc0374d5ed3ac4febd85b327f49721de593f83")
+	res.Header.Set("Authorization", isToken)
 	fmt.Println(res.Header)
 	if err != nil {
 		return nil, err
