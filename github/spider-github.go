@@ -3,7 +3,9 @@ package github
 import (
 	"encoding/json"
 	"fmt"
-	"net/http"
+	"io/ioutil"
+	"log"
+	"strconv"
 	"time"
 )
 
@@ -46,19 +48,11 @@ var (
 	URI        = "https://api.github.com/users/"
 	PublicRepo = 0
 	GithubUser = ""
+	PerPage    = 100000
 )
 
-// Client for connect to github API
-var myClient = &http.Client{Timeout: 10 * time.Second}
-
-func GithubReq(url string) (*http.Response, error) {
-	res, err := myClient.Get(url)
-	if err != nil {
-		return nil, err
-	}
-	return res, nil
-}
-
+// InitialSpider function for get user information
+// - public repo - company name - etc
 func InitalSpider(login string) {
 	// define username github
 	GithubUser = login
@@ -81,4 +75,46 @@ func InitalSpider(login string) {
 	fmt.Println("[+] Spider github account :", GithubUser)
 	fmt.Println("[+] Work at : ", userInfoRes.Company)
 	fmt.Println("[+] Total public repo : ", PublicRepo)
+	PreSpider()
+}
+
+type RepoPublic []struct {
+	ID     int    `json:"id"`
+	NodeID string `json:"node_id"`
+	Name   string `json:"name"`
+}
+
+// Get hash from repo public list
+func PreSpider() {
+	// isPage := CalculatePage()
+	fmt.Println("[+] This process starting, take some coffee and enjoyed .. ")
+	URIRepoPub := URI + GithubUser + "/repos?per_page=" + strconv.Itoa(PerPage)
+
+	isFinalRepo := URIRepoPub
+	// Get
+	r, err := GithubReq(isFinalRepo)
+	if err != nil {
+		fmt.Println("[!] Error when access user data from github")
+		fmt.Println("[!] Cek this endpoint ", URI)
+		return
+	}
+	// body save
+	body, err := ioutil.ReadAll(r.Body)
+	r.Body.Close()
+	if err != nil {
+		log.Fatal("Error when save body ", err)
+	}
+	// Parsing
+	data := RepoPublic{}
+	err = json.Unmarshal(body, &data)
+	if err != nil {
+		log.Fatal(err)
+	}
+	// Loop
+	loop := 1
+	for _, x := range data {
+		loop = loop + 1
+		fmt.Println("[+] pre-cloning repo : ", x.Name, " repo ", loop)
+		//GetShaCommiter(x.Name)
+	}
 }
