@@ -103,7 +103,7 @@ func PreSpider() {
 	body, err := ioutil.ReadAll(r.Body)
 	r.Body.Close()
 	if err != nil {
-		fmt.Println("[!] Error func Prespider ")
+		fmt.Println("[Debug] Error func Prespider when body save ")
 		return
 	}
 
@@ -111,7 +111,7 @@ func PreSpider() {
 	data := RepoPublic{}
 	err = json.Unmarshal(body, &data)
 	if err != nil {
-		fmt.Println("[!] Error func Prespider ")
+		fmt.Println("[Debug] Error func Prespider when marshalling Parsing ")
 		return
 	}
 
