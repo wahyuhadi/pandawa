@@ -90,7 +90,8 @@ func main() {
 		os.Exit(1)
 	}
 	// convert favicon ico ke mumurhash
-	mmh3 := shodan.GetFav(*favicon)
+	// mmh3 := shodan.GetFav(*favicon)
+	mmh3 := "tes"
 	//Exec shodan main
 	shodan.PreSearch(shodankey, mmh3, dbname)
 
