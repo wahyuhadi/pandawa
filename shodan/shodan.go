@@ -27,17 +27,17 @@ type ShodanResponses struct {
 	} `json:"matches"`
 }
 
-func PreSearch(key string, mmh3 uint32, dbname string) {
-	fmt.Println(mmh3)
+func PreSearch(key string, mmh3 string, dbname string) {
 
 	// for temp search by query like this
 	// before mumur function search done
 	// search by http.hash
-	search := "tiket.com"
+	search := "http.favicon.hash:" + mmh3
 	isQuery := "&query=" + search
 	isURI := URI + key + isQuery
 
 	// Initial request to URI
+	fmt.Println("[+] Searching data in shodan ....")
 	res, err := http.Get(isURI)
 	if err != nil {
 		log.Fatal(err)
@@ -70,4 +70,5 @@ func AddDataShodanToDB(dbname string, data ShodanResponses) {
 	for _, i := range data.Matches {
 		db.AddDBShodan(i.IP, i.IPStr, i.Isp, dbname)
 	}
+	fmt.Println("[+] Finish .")
 }

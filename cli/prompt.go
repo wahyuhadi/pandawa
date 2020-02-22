@@ -2,10 +2,12 @@ package cli
 
 import (
 	"fmt"
+	"os"
 	"strings"
 
 	db "pandawa/database"
 	github "pandawa/github"
+	shodan "pandawa/shodan"
 	spider "pandawa/spider"
 
 	prompt "github.com/c-bata/go-prompt"
@@ -38,6 +40,11 @@ func executor(in string) {
 		return
 	}
 	switch initcommand[0] {
+	case "set-operation":
+		fmt.Println("[+] Generating operation database ..")
+		dbname := db.GenerateDb(initcommand[1])
+		fmt.Println("[+] Success generate db " + dbname)
+		return
 
 	case "github":
 		fmt.Println("[+] Collect data github")
@@ -61,6 +68,16 @@ func executor(in string) {
 		github.InitalSpider(initcommand[1])
 		return
 
+	case "spider-shodan":
+		shodankey := os.Getenv("shodan")
+		if shodankey == "" {
+			fmt.Println("[!] shodan key not found please export shodan key in .bashrc or .zshrc")
+			os.Exit(1)
+		}
+		dbname := "pandawa-output/" + initcommand[2] + ".db"
+		shodan.PreSearch(shodankey, initcommand[1], dbname)
+		return
+
 	default:
 		fmt.Println("[!] Not in services")
 		return
@@ -73,11 +90,13 @@ func executor(in string) {
 
 func completer(in prompt.Document) []prompt.Suggest {
 	s := []prompt.Suggest{
+		{Text: "set-operation", Description: "Set operation name"},
 		{Text: "github", Description: "Get All data from github with operation name"},
 		{Text: "shodan", Description: "Get All data from shodan with operation name"},
 		{Text: "spider-js", Description: "Get js file from web "},
 		{Text: "spider-page", Description: "Get page file from web "},
 		{Text: "spider-github", Description: "Get data from github and commit"},
+		{Text: "spider-shodan", Description: "Get data from shodna with mm3"},
 	}
 	return prompt.FilterHasPrefix(s, in.GetWordBeforeCursor(), true)
 }
