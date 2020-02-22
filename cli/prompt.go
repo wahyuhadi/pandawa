@@ -28,6 +28,11 @@ func executor(in string) {
 	initcommand := strings.Split(in, " ")
 
 	if len(initcommand) == 1 {
+		if initcommand[0] == "exit" {
+			fmt.Println("[+] Pandawa shutdown services ...")
+			os.Exit(1)
+			return
+		}
 		fmt.Println("[!] please set the operation name")
 		fmt.Println("[!] example >>> github pandawa")
 
@@ -78,6 +83,9 @@ func executor(in string) {
 		shodan.PreSearch(shodankey, initcommand[1], dbname)
 		return
 
+	case "exit":
+		os.Exit(1)
+
 	default:
 		fmt.Println("[!] Not in services")
 		return
@@ -90,6 +98,7 @@ func executor(in string) {
 
 func completer(in prompt.Document) []prompt.Suggest {
 	s := []prompt.Suggest{
+		{Text: "exit", Description: "Exit."},
 		{Text: "set-operation", Description: "Set operation name"},
 		{Text: "github", Description: "Get All data from github with operation name"},
 		{Text: "shodan", Description: "Get All data from shodan with operation name"},
