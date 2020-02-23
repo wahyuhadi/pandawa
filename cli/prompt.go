@@ -6,7 +6,7 @@ import (
 	"strings"
 
 	db "pandawa/database"
-	github "pandawa/github"
+	git "pandawa/git"
 	shodan "pandawa/shodan"
 	spider "pandawa/spider"
 
@@ -70,7 +70,7 @@ func executor(in string) {
 		return
 
 	case "spider-github":
-		github.InitalSpider(initcommand[1])
+		git.InitialSearch(initcommand[1])
 		return
 
 	case "spider-shodan":
