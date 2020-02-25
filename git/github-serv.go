@@ -43,5 +43,6 @@ func GetUserFromOrg(org string) {
 	)
 
 	tc := oauth2.NewClient(ctx, ts)
+	member := GetListMemberFromOrg(tc, org)
 
 }
