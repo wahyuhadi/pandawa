@@ -6,11 +6,13 @@ import (
 	"pandawa/github"
 )
 
-func GetListMemberFromOrg(session *http.Client, org string) {
-	members, _, err := github.ListMembers(session, org, nil)
+// Get function List  member from organtation
+func GetListMemberFromOrg(session *http.Client, org string) ([]string, error) {
+	members, _, err := github.LisMembers(session, org, nil)
 	if err != nil {
 		fmt.Println(err)
-
+		return nil, err
 	}
 
+	return members, nil
 }
