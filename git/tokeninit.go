@@ -10,7 +10,7 @@ import (
 func GetInitialToken() (string, error) {
 	token := os.Getenv("github")
 	if token == "" {
-		return nil, errors.New("[!] github token not found in env / .bashrc / .zshrc etc")
+		return "", errors.New("[!] github token not found in env / .bashrc / .zshrc etc")
 	}
 	return token, nil
 }
