@@ -73,6 +73,10 @@ func executor(in string) {
 		git.InitialSearch(initcommand[1])
 		return
 
+	case "git-org":
+		git.GetUserFromOrg(initcommand[1])
+		return
+
 	case "spider-shodan":
 		shodankey := os.Getenv("shodan")
 		if shodankey == "" {
@@ -101,6 +105,7 @@ func completer(in prompt.Document) []prompt.Suggest {
 		{Text: "exit", Description: "Exit."},
 		{Text: "set-operation", Description: "Set operation name"},
 		{Text: "github", Description: "Get All data from github with operation name"},
+		{Text: "git-org", Description: "Get All users from org"},
 		{Text: "shodan", Description: "Get All data from shodan with operation name"},
 		{Text: "spider-js", Description: "Get js file from web "},
 		{Text: "spider-page", Description: "Get page file from web "},

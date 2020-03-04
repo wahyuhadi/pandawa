@@ -44,5 +44,6 @@ func GetUserFromOrg(org string) {
 
 	tc := oauth2.NewClient(ctx, ts)
 	member, _ := GetListMemberFromOrg(tc, org)
+	fmt.Println(member)
 
 }
