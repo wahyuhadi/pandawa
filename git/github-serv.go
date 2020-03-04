@@ -18,7 +18,7 @@ func InitialSearch(user string) {
 	ctx := context.Background()
 
 	ts := oauth2.StaticTokenSource(
-		&oauth2.Token{AccessToken: gittoken},
+		&oauth2.Token{AccessToken: gitoken},
 	)
 
 	tc := oauth2.NewClient(ctx, ts)
@@ -39,7 +39,7 @@ func GetUserFromOrg(org string) {
 
 	ctx := context.Background()
 	ts := oauth2.StaticTokenSource(
-		&oauth2.Token{AccessToken: gittoken},
+		&oauth2.Token{AccessToken: gitoken},
 	)
 
 	tc := oauth2.NewClient(ctx, ts)
