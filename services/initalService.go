@@ -9,4 +9,6 @@ func PreInit(host string) {
 	CheckMongo_27017(host)
 	// check mongodb with port 27018
 	CheckMongo_27018(host)
+	// Check Redis
+	CheckRedis(host)
 }
