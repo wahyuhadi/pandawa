@@ -47,7 +47,7 @@ func GetUserFromOrg(org, ops string) {
 	// generate tables if ops not null
 	// with name table : github_org
 	if ops != "" {
-		query := "CREATE TABLE IF NOT EXISTS github_org (id INTEGER PRIMARY KEY, user TEXT, org TEXT, url TEXT)"
+		query := "CREATE TABLE IF NOT EXISTS github_org (id INTEGER PRIMARY KEY, user TEXT, url TEXT, org TEXT)"
 		operation := "pandawa-output/" + ops + ".db"
 		database.GenerateTables(operation, query)
 	}
@@ -59,11 +59,12 @@ func GetUserFromOrg(org, ops string) {
 	}
 
 	for _, member := range members {
-		fmt.Println("[+] User : ", *member.Login)
-		fmt.Println("[+] Github : ", *member.HTMLURL)
+		fmt.Println("[+] User   : ", *member.Login)
+		fmt.Println("[+] Github : ", *member.HTMLURL, "\n")
+
 		operation := "pandawa-output/" + ops + ".db"
-		queryInsert := "INSERT INTO github_org (" + *member.Login + "," + *member.HTMLURL + "," + org + ") VALUES (?, ?, ?)"
-		database.CreateData(operation, queryInsert)
+		// queryInsert := "INSERT INTO github_org (" + *member.Login + "," + *member.HTMLURL + "," + org + ") VALUES (?, ?, ?)"
+		database.InsertDataUserOrg(operation, *member.Login, *member.HTMLURL, org)
 	}
 
 	return
