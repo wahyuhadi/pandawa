@@ -38,12 +38,14 @@ func executor(in string) {
 
 		return
 	}
+
 	if initcommand[1] == "" {
 		fmt.Println("[!] please set the operation name")
 		fmt.Println("[!] example >>> github pandawa")
 
 		return
 	}
+
 	switch initcommand[0] {
 	case "set-operation":
 		fmt.Println("[+] Generating operation database ..")
@@ -73,8 +75,14 @@ func executor(in string) {
 		git.InitialSearch(initcommand[1])
 		return
 
+	// Get user from org
 	case "git-org":
-		git.GetUserFromOrg(initcommand[1])
+		if initcommand[2] != "" {
+			git.GetUserFromOrg(initcommand[1], initcommand[2])
+			return
+		}
+
+		git.GetUserFromOrg(initcommand[1], "")
 		return
 
 	case "spider-shodan":

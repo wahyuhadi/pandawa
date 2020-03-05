@@ -56,3 +56,19 @@ func CollectData(nameDB string) {
 
 	}
 }
+
+// Generate Tables function fror saved
+func GenerateTables(nameDB, query string) {
+	database, _ := sql.Open("sqlite3", nameDB)
+	defer database.Close()
+	statement, _ := database.Prepare(query)
+	statement.Exec()
+}
+
+func CreateData(nameDB, query string) {
+	// DB := nameDB + ".db"
+	database, _ := sql.Open("sqlite3", nameDB)
+	defer database.Close()
+	statement, _ := database.Prepare(query)
+	statement.Exec()
+}
