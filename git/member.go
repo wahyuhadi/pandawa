@@ -2,7 +2,7 @@ package git
 
 import (
 	"context"
-	"fmt"
+	"errors"
 	"net/http"
 	"pandawa/github"
 )
@@ -13,10 +13,10 @@ func GetListMemberFromOrg(session *http.Client, org string) ([]*github.User, err
 	client := github.NewClient(session)
 	ctx := context.Background()
 
+	// ListsMembers in file github/orgs_members.go file
 	members, _, err := client.Organizations.ListMembers(ctx, org, nil)
 	if err != nil {
-		fmt.Println(err)
-		return nil, err
+		return nil, errors.New("Error when get users from github org")
 	}
 
 	return members, nil

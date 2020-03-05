@@ -44,12 +44,10 @@ func GetChangesCommit(session *http.Client, user, reponame, sha string) {
 		// make validate to patch the error nil pointer
 		if changeCommits.Patch != nil {
 
-			// Change commit file changes with regex
-			// return bool type is true or false
+			// Change commit file changes with regex, return bool type is true or false
 			// function RegexCheckCommit in regex.go file
 			_, find, _ := RegexCheckCommit(*changeCommits.Patch)
 
-			// if found with regex
 			if find {
 				fmt.Println("\n[+] repo name : ", reponame)
 				fmt.Println("[+] Filename : ", *changeCommits.Filename)

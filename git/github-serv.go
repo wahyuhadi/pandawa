@@ -43,7 +43,17 @@ func GetUserFromOrg(org string) {
 	)
 
 	tc := oauth2.NewClient(ctx, ts)
-	member, _ := GetListMemberFromOrg(tc, org)
-	fmt.Println(member)
+	members, err := GetListMemberFromOrg(tc, org)
+
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+
+	for _, member := range members {
+		fmt.Println("[+] User : ", *member.Login)
+		fmt.Println("[+] Github : ", *member.HTMLURL)
+	}
+	// fmt.Println(members)
 
 }
