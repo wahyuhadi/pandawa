@@ -77,12 +77,12 @@ func executor(in string) {
 
 	// Get user from org
 	case "git-org":
-		if initcommand[2] != "" {
-			git.GetUserFromOrg(initcommand[1], initcommand[2])
+		if initcommand[2] == "" {
+			fmt.Println("[!] Please add ops name ")
 			return
 		}
 
-		git.GetUserFromOrg(initcommand[1], "")
+		git.GetUserFromOrg(initcommand[1], initcommand[2])
 		return
 
 	case "spider-shodan":

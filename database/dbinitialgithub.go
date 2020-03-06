@@ -65,10 +65,19 @@ func GenerateTables(nameDB, query string) {
 	statement.Exec()
 }
 
+// do not use this function temp
 func CreateData(nameDB, query string) {
 	// DB := nameDB + ".db"
 	database, _ := sql.Open("sqlite3", nameDB)
 	defer database.Close()
 	statement, _ := database.Prepare(query)
 	statement.Exec()
+}
+
+func InsertDataUserOrg(nameDB, user, repo, org string) {
+	// DB := nameDB + ".db"
+	database, _ := sql.Open("sqlite3", nameDB)
+	defer database.Close()
+	statement, _ := database.Prepare("INSERT INTO github_org (user, url ,org) VALUES (?, ?, ?)")
+	statement.Exec(user, repo, org)
 }

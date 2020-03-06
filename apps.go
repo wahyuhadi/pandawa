@@ -23,21 +23,21 @@ var (
 )
 
 // Membaca file configurasi dari config.json
-// type Configuration struct {
-// 	Shodan struct {
-// 		Key string
-// 	}
-// 	Listen struct {
-// 		Address string
-// 		Port    string
-// 	}
-// 	OutboundCall struct {
-// 		CallerID  string
-// 		Retries   int
-// 		SpoolPath string
-// 	}
-// 	VmRoot string
-// }
+type Configuration struct {
+	Shodan struct {
+		Key string
+	}
+	Listen struct {
+		Address string
+		Port    string
+	}
+	OutboundCall struct {
+		CallerID  string
+		Retries   int
+		SpoolPath string
+	}
+	VmRoot string
+}
 
 //  Membaca file conf untuk mendapatkan key / API KEY shodan dan dll
 func ReadFileConf() Configuration {
